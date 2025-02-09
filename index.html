@@ -541,13 +541,15 @@
             let finalOutput = "";
             finalOutput += "if thisLevel == 1 then<br>";
             finalOutput += "         if thisScene == 1 then<br>";
-            finalOutput += "      sceneStart = <span style=\"color:red;\">2763 --change by your frame number start level</span><br>";
-            finalOutput += "      sceneEnd   = <span style=\"color:red;\">3283 --change by your frame number end level</span><br>";
+            finalOutput += "<br><br>";
+            finalOutput += "      sceneStart = <span style=\"color:red;\">your frame number start level</span><br>";
+            finalOutput += "      sceneEnd   = <span style=\"color:red;\">your frame number end level</span><br>";
             finalOutput += "      n = 0<br><br>";
             moves.forEach(move => {
                 let parts = move.split("=");
                 finalOutput += "n=n+1;move[n] =" + parts[1] + "<br>";
             });
+            finalOutput += "<br><br>";
             finalOutput += "totalMoves = n<br>";
             finalOutput += "End";
             movesList.innerHTML = finalOutput;
