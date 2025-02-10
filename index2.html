@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Saisie de mouvement</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid white;
+            border-radius: 5px;
+            background-color: black;
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        label {
+            display: inline-block;
+            width: 150px;
+        }
+        input, select {
+            padding: 5px;
+            width: 150px;
+            background-color: black;
+            color: white;
+            border: 1px solid white;
+        }
+        button {
+            margin-top: 10px;
+            padding: 5px 15px;
+            background-color: white;
+            color: black;
+            border: none;
+            cursor: pointer;
+        }
+        #testArea {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid white;
+            border-radius: 5px;
+            background-color: black;
+        }
+        #movesList {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: black;
+            border: 1px solid white;
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+        .combo-commands, .loop-commands, .multi-commands, 
+        .hold-commands, .mash-commands, .tolevel-commands, 
+        .toscene-commands, .way-commands, .text-commands {
+            display: none;
+            margin-top: 10px;
+        }
+        #additionalMoveSection {
+            display: none;
+            margin-top: 10px;
+        }
+        #multiActionsList {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: black;
+            border: 1px solid white;
+            border-radius: 5px;
+        }
+        .error-message {
+            color: white;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        #additionalInput {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+    <h1 style="text-align: center;">Moving with Singe2: A Beginner's Friend</h1>
+    <h2 style="text-align: center;">For Singe 2 (kimmy)</h2>
+    <p style="text-align: center;">
+        An easy-to-use movement creation assistant:<br>
+        Tell me what you want, I'll write it for you.
+    </p>
+</head>
+<body>
+    <div class="form-container">
+        <h2 style="text-align: left;">Creating movement:</h2>
+
+        <div class="input-group">
+            <label>Start Frame:</label>
+            <input type="number" id="firstNumber">
+        </div>
+        <div class="input-group">
+            <label>End Frame:</label>
+            <input type="number" id="secondNumber">
+        </div>
+        <div class="input-group">
+            <label>SELECT MOVE:</label>
+            <select id="command" onchange="toggleCommands()">
+                <option value=""></option>
+                <option value="U">UP</option>
+                <option value="UD">Up, then Down</option>
+                <option value="D">DOWN</option>
+                <option value="DU">Down, then up</option>
+                <option value="L">LEFT</option>
+                <option value="LR">Left, then Right</option>
+                <option value="R">RIGHT</option>
+                <option value="RL">Right, then left</option>
+                <option value="UL">UPLEFT</option>
+                <option value="UR">UPRIGHT</option>
+                <option value="DL">DOWNLEFT</option>
+                <option value="DR">DOWNRIGHT</option>
+                <option value="B1">BUTTON_1</option>
+                <option value="B2">BUTTON_2</option>
+                <option value="B3">BUTON_3</option>
+                <option value="MULTI">MULTI</option>
+                <option value="COMBO">COMBO</option>
+                <option value="LOOP">LOOP</option>
+                <option value="MASH">MASH</option>
+                <option value="HOLD">HOLD</option>
+                <option value="LETGO">LETGO</option>
+                <option value="TOLEVEL">TOLEVEL</option>
+                <option value="TOSCENE">TOSCENE</option>
+                <option value="SKIP">SKIP</option>
+                <option value="DOUBLE">DOUBLE</option>
+                <option value="ACTUP">ACTUP</option>
+                <option value="ACTDOWN">ACTDOWN</option>
+                <option value="ACTLEFT">ACTLEFT</option>
+                <option value="ACTRIGHT">ACTRIGHT</option>
+                <option value="WAY">WAY</option>
+                <option value="TEXT">TEXT</option>
+                <option value="NM">NOMOVE</option>
+                <option value="WAIT">NOTHING</option>
+            </select>
+        </div>
+
+        <!-- Section HOLD -->
+        <div id="holdCommands" class="hold-commands">
+            <div class="input-group">
+                <label>Action for HOLD:</label>
+                <select id="holdAction">
+                    <option value="U">UP</option>
+                    <option value="D">DOWN</option>
+                    <option value="L">LEFT</option>
+                    <option value="R">RIGHT</option>
+                    <option value="UL">UPLEFT</option>
+                    <option value="UR">UPRIGHT</option>
+                    <option value="DL">DOWNLEFT</option>
+                    <option value="DR">DOWNRIGHT</option>
+                    <option value="B1">BUTTON_1</option>
+                    <option value="B2">BUTTON_2</option>
+                    <option value="B3">BUTTON_3</option>
+                </select>
+            </div>
+            <div id="additionalInput" class="input-group">
+                <label>Additional Input for HOLD:</label>
+                <input type="text" id="additionalInputField">
+            </div>
+        </div>
+
+        <!-- Section MASH -->
+        <div id="mashCommands" class="mash-commands">
+            <div class="input-group">
+                <label>Action for MASH:</label>
+                <select id="mashAction">
+                    <option value="U">UP</option>
+                    <option value="D">DOWN</option>
+                    <option value="L">LEFT</option>
+                    <option value="R">RIGHT</option>
+                    <option value="UL">UPLEFT</option>
+                    <option value="UR">UPRIGHT</option>
+                    <option value="DL">DOWNLEFT</option>
+                    <option value="DR">DOWNRIGHT</option>
+                    <option value="B1">BUTTON_1</option>
+                    <option value="B2">BUTTON_2</option>
+                    <option value="B3">BUTTON_3</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Difficulty:</label>
+                <select id="mashDifficulty">
+                    <option value="9">9</option>
+                    <option value="8">8</option>
+                    <option value="7">7</option>
+                    <option value="6">6</option>
+                    <option value="5">5</option>
+                    <option value="4">4</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                    <option value="1">1</option>
+                    <option value="0">0</option>
+                    <option value="-1">-1</option>
+                    <option value="-2">-2</option>
+                    <option value="-3">-3</option>
+                    <option value="-4">-4</option>
+                    <option value="-5">-5</option>
+                    <option value="-6">-6</option>
+                    <option value="-7">-7</option>
+                    <option value="-8">-8</option>
+                    <option value="-9">-9</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Section COMBO -->
+        <div id="comboCommands" class="combo-commands">
+            <div class="input-group">
+                For a COMBO move, Actions 1 and 2 must be executed simultaneously. <br>Select the two actions you want.<br>
+                <label>Action 1:</label>
+                <select id="command2">
+                    <option value="U">UP</option>
+                    <option value="D">DOWN</option>
+                    <option value="L">LEFT</option>
+                    <option value="R">RIGHT</option>
+                    <option value="UL">UPLEFT</option>
+                    <option value="UR">UPRRIGHT</option>
+                    <option value="DL">DOWNLEFT</option>
+                    <option value="DR">DDOWN RIGHT</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                    <option value="B3">B3</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Action 2:</label>
+                <select id="command3">
+                    <option value="U">UP</option>
+                    <option value="D">DOWN</option>
+                    <option value="L">LEFT</option>
+                    <option value="R">RIGHT</option>
+                    <option value="UL">UPLEFT</option>
+                    <option value="UR">UPRIGHT</option>
+                    <option value="DL">DOWNLEFT</option>
+                    <option value="DR">DOWNRIGHT</option>
+                    <option value="B1">BUTTON_1</option>
+                    <option value="B2">BUTTON_2</option>
+                    <option value="B3">BUTTON_3</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Section LOOP -->
+        <div id="loopCommands" class="loop-commands">
+            <div class="input-group">
+                <label>Begin the loop from :</label>
+                <select id="command4">
+                    <option value=""></option>
+                    <option value="U">UP</option>
+                    <option value="D">DOWN</option>
+                    <option value="L">LEFT</option>
+                    <option value="R">RIGHT</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label> Direction of rotation <br> + = clockwise <br> - = counterclockwise</label>
+                <select id="command5">
+                    <option value=""></option>
+                    <option value="+">+ (TURN TO RIGHT)</option>
+                    <option value="-">- (TURN TO LEFT)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>STYLLE DE LA LOOP:</label>
+                <select id="command6">
+                    <option value=""></option>
+                    <option value="Q">Q (QUARTER LOOP)</option>
+                    <option value="H">H (HALF LOOP)</option>
+                    <option value="1">1 (LOOP)</option>
+                    <option value="2">2 (LOOP)</option>
+                    <option value="3">3 (LOOP)</option>
+                    <option value="4">4 (LOOP)</option>
+                    <option value="5">5 (LOOP)</option>
+                    <option value="6">6 (LOOP)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Section MULTI -->
+        <div id="multiCommands" class="multi-commands">
+            <div class="input-group">
+                <label>Action :</label>
+                <select id="multiAction">
+                    <option value="U">UP</option>
+                    <option value="D">DOWN</option>
+                    <option value="L">LEFT</option>
+                    <option value="R">RIGHT</option>
+                    <option value="UL">UPLEFT</option>
+                    <option value="UR">UPRIGHT</option>
+                    <option value="DL">DOWNLEFT</option>
+                    <option value="DR">DOWNRIGHT</option>
+                    <option value="B1">BUTTON_1</option>
+                    <option value="B2">BUTTON_2</option>
+                    <option value="B3">BUTTON_3</option>
+                </select>
+                <button onclick="addMultiAction()">Ajouter Action</button>
+            </div>
+            <div id="multiActionsList">
+                <strong>MULTI Sequence Actions: This list of actions will be played sequentially :</strong>
+                <div id="multiActionsDisplay"></div>
+            </div>
+        </div>
+
+        <!-- Sections TOLEVEL/TOSCENE/WAY -->
+        <div id="tolevelCommands" class="tolevel-commands">
+            <div class="input-group">
+                <label>Level Number (L):</label>
+                <input type="number" id="tolevelInput">
+            </div>
+        </div>
+
+        <div id="tosceneCommands" class="toscene-commands">
+            <div class="input-group">
+                <label>Scene Number (S):</label>
+                <input type="number" id="tosceneInput">
+            </div>
+        </div>
+
+        <div id="wayCommands" class="way-commands">
+            <div class="input-group">
+                <label>Way Number (W):</label>
+                <input type="number" id="wayInput">
+            </div>
+        </div>
+
+        <!-- Nouvelle section TEXT -->
+        <div id="textCommands" class="text-commands">
+            <div class="input-group">
+                <label>Enter your text (UPPERCASE):</label>
+                <input type="text" id="textInput" oninput="this.value = this.value.toUpperCase()">
+            </div>
+        </div>
+
+        <div id="additionalMoveSection">
+            <div class="input-group">
+                <label>Add another move?</label>
+                <select id="additionalMoveChoice" onchange="toggleAdditionalMove()">
+                    <option value="no">Non</option>
+                    <option value="yes">Oui</option>
+                </select>
+            </div>
+            <div id="additionalMoveList" class="input-group" style="display: none;">
+                <label>Extra movement for the loop :</label>
+                <select id="command7">
+                    <option value="B1">BUTTON_1</option>
+                    <option value="B2">BUTTON_2</option>
+                    <option value="B3">BUTTON_3</option>
+                </select>
+            </div>
+        </div>
+
+        <button onclick="generateMove()">Write Move</button>
+
+        <div id="testArea">
+            <h3>List of created movements: Copy this text and place it in your level.</h3><br>
+            <div id="movesList"></div>
+            <button onclick="clearMoves()">Erase all:</button>
+            <button onclick="copyMoves()">Copy</button>
+        </div>
+
+    <script>
+        let n = 0;
+        let moves = [];
+        let multiActions = [];
+        let finalOutputText = "";
+
+        function toggleCommands() {
+            const command = document.getElementById('command').value;
+            const comboCommands = document.getElementById('comboCommands');
+            const loopCommands = document.getElementById('loopCommands');
+            const multiCommands = document.getElementById('multiCommands');
+            const holdCommands = document.getElementById('holdCommands');
+            const mashCommands = document.getElementById('mashCommands');
+            const tolevelCommands = document.getElementById('tolevelCommands');
+            const tosceneCommands = document.getElementById('tosceneCommands');
+            const wayCommands = document.getElementById('wayCommands');
+            const textCommands = document.getElementById('textCommands');
+            const additionalMoveSection = document.getElementById('additionalMoveSection');
+            
+            comboCommands.style.display = command === 'COMBO' ? 'block' : 'none';
+            loopCommands.style.display = command === 'LOOP' ? 'block' : 'none';
+            multiCommands.style.display = command === 'MULTI' ? 'block' : 'none';
+            holdCommands.style.display = command === 'HOLD' ? 'block' : 'none';
+            mashCommands.style.display = command === 'MASH' ? 'block' : 'none';
+            tolevelCommands.style.display = command === 'TOLEVEL' ? 'block' : 'none';
+            tosceneCommands.style.display = command === 'TOSCENE' ? 'block' : 'none';
+            wayCommands.style.display = command === 'WAY' ? 'block' : 'none';
+            textCommands.style.display = command === 'TEXT' ? 'block' : 'none';
+            additionalMoveSection.style.display = command === 'LOOP' ? 'block' : 'none';
+
+            if (command !== 'MULTI') {
+                multiActions = [];
+                updateMultiActionsDisplay();
+            }
+        }
+
+        function toggleAdditionalMove() {
+            const additionalMoveChoice = document.getElementById('additionalMoveChoice').value;
+            const additionalMoveList = document.getElementById('additionalMoveList');
+            additionalMoveList.style.display = additionalMoveChoice === 'yes' ? 'block' : 'none';
+        }
+
+        function addMultiAction() {
+            const multiAction = document.getElementById('multiAction').value;
+            multiActions.push(multiAction);
+            updateMultiActionsDisplay();
+        }
+
+        function updateMultiActionsDisplay() {
+            const multiActionsDisplay = document.getElementById('multiActionsDisplay');
+            multiActionsDisplay.innerHTML = multiActions.join(', ');
+        }
+
+        function generateMove() {
+            const firstNum = parseInt(document.getElementById('firstNumber').value);
+            const secondNum = parseInt(document.getElementById('secondNumber').value);
+            const command = document.getElementById('command').value;
+
+            if (firstNum >= secondNum) {
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('errorMessage').style.display = 'none';
+            }
+
+            if (firstNum && secondNum) {
+                let moveString;
+                if (command === 'COMBO') {
+                    const command2 = document.getElementById('command2').value;
+                    const command3 = document.getElementById('command3').value;
+                    moveString = `move[${n + 1}] = {${firstNum},${secondNum},${command},1,${command2},${command3}}`;
+                } 
+                else if (command === 'LOOP') {
+                    const command4 = document.getElementById('command4').value;
+                    const command5 = document.getElementById('command5').value;
+                    const command6 = document.getElementById('command6').value;
+                    const additionalMoveChoice = document.getElementById('additionalMoveChoice').value;
+                    const additionalMove = additionalMoveChoice === 'yes' ? document.getElementById('command7').value : '';
+                    moveString = `move[${n + 1}] = {${firstNum},${secondNum},${command},1,"${command4},${command5},${command6}${additionalMove ? `,${additionalMove}` : ''}"}`;
+                } 
+                else if (command === 'MULTI') {
+                    if (multiActions.length === 0) {
+                        alert('Veuillez ajouter au moins une action pour le mouvement MULTI.');
+                        return;
+                    }
+                    moveString = `move[${n + 1}] = {${firstNum},${secondNum},${command},1,"${multiActions.join(',')}"}`;
+                } 
+                else if (command === 'HOLD') {
+                    const holdAction = document.getElementById('holdAction').value;
+                    const additionalInputField = document.getElementById('additionalInputField').value;
+                    moveString = `move[${n + 1}] = {${firstNum},${secondNum},${command},1,${holdAction}${additionalInputField ? `,${additionalInputField}` : ''}}`;
+                } 
+                else if (command === 'MASH') {
+                    const mashAction = document.getElementById('mashAction').value;
+                    const mashDifficulty = document.getElementById('mashDifficulty').value;
+                    moveString = `move[${n + 1}] = {${firstNum},${secondNum},${command},1,${mashAction},${mashDifficulty}}`;
+                } 
+                else if (command === 'TOLEVEL') {
+                    const lValue = document.getElementById('tolevelInput').value;
+                    if (!lValue) {
+                        alert('Please enter a level number for TOLEVEL');
+                        return;
+                    }
+                    moveString = `move[${n + 1}] = {${firstNum},${secondNum},${command},${lValue}}`;
+                } 
+                else if (command === 'TOSCENE') {
+                    const sValue = document.getElementById('tosceneInput').value;
+                    if (!sValue) {
+                        alert('Please enter a scene number for TOSCENE');
+                        return;
+                    }
+                    moveString = `move[${n + 1}] = {${firstNum},${secondNum},${command},${sValue}}`;
+                } 
+                else if (command === 'WAY') {
+                    const wValue = document.getElementById('wayInput').value;
+                    if (!wValue) {
+                        alert('Please enter a way number for WAY');
+                        return;
+                    }
+                    moveString = `move[${n + 1}] = {${firstNum},${secondNum},${command},${wValue}}`;
+                } 
+                else if (command === 'TEXT') {
+                    const textValue = document.getElementById('textInput').value;
+                    if (!textValue) {
+                        alert('Please enter text for TEXT command');
+                        return;
+                    }
+                    moveString = `move[${n + 1}] = {${firstNum},${secondNum},SKIP,1,"${textValue}"}`;
+                } 
+                else {
+                    moveString = `move[${n + 1}] = {${firstNum},${secondNum},${command},1}`;
+                }
+
+                moves.push(moveString);
+                n = n + 1;
+
+                updateMovesList();
+
+                // Réinitialisation des champs
+                document.getElementById('firstNumber').value = '';
+                document.getElementById('secondNumber').value = '';
+                document.getElementById('command').selectedIndex = 0;
+                if (command === 'TOLEVEL') document.getElementById('tolevelInput').value = '';
+                if (command === 'TOSCENE') document.getElementById('tosceneInput').value = '';
+                if (command === 'WAY') document.getElementById('wayInput').value = '';
+                if (command === 'TEXT') document.getElementById('textInput').value = '';
+                if (command === 'COMBO') {
+                    document.getElementById('command2').selectedIndex = 0;
+                    document.getElementById('command3').selectedIndex = 0;
+                } 
+                else if (command === 'LOOP') {
+                    document.getElementById('command4').selectedIndex = 0;
+                    document.getElementById('command5').selectedIndex = 0;
+                    document.getElementById('command6').selectedIndex = 0;
+                    document.getElementById('additionalMoveChoice').selectedIndex = 0;
+                    document.getElementById('command7').selectedIndex = 0;
+                    document.getElementById('additionalMoveList').style.display = 'none';
+                } 
+                else if (command === 'MULTI') {
+                    multiActions = [];
+                    updateMultiActionsDisplay();
+                } 
+                else if (command === 'HOLD') {
+                    document.getElementById('holdAction').selectedIndex = 0;
+                    document.getElementById('additionalInputField').value = '';
+                } 
+                else if (command === 'MASH') {
+                    document.getElementById('mashAction').selectedIndex = 0;
+                    document.getElementById('mashDifficulty').selectedIndex = 0;
+                }
+                toggleCommands();
+            } else {
+                alert('Veuillez remplir tous les champs');
+            }
+        }
+
+        function updateMovesList() {
+            const movesList = document.getElementById('movesList');
+            let finalOutput = "";
+            finalOutput += "if thisLevel == 1 then<br>";
+            finalOutput += "         if thisScene == 1 then<br>";
+            finalOutput += "<br><br>";
+            finalOutput += "      sceneStart = <span style=\"color:red;\">your frame number start level</span><br>";
+            finalOutput += "      sceneEnd   = <span style=\"color:red;\">your frame number end level</span><br>";
+            finalOutput += "      n = 0<br><br>";
+            moves.forEach(move => {
+                let parts = move.split("=");
+                finalOutput += "n=n+1;move[n] =" + parts[1] + "<br>";
+            });
+            finalOutput += "<br><br>";
+            finalOutput += "totalMoves = n<br>";
+            finalOutput += "End";
+            movesList.innerHTML = finalOutput;
+            finalOutputText = finalOutput.replace(/<br>/g, "\n");
+        }
+
+        function clearMoves() {
+            moves = [];
+            n = 0;
+            updateMovesList();
+        }
+
+        function copyMoves() {
+            if(finalOutputText === "") {
+                alert("No moves to copy!");
+                return;
+            }
+            navigator.clipboard.writeText(finalOutputText).then(function() {
+                alert("Copied to clipboard");
+            }, function(err) {
+                alert("Error in copying text: " + err);
+            });
+        }
+    </script>
+    <div id="errorMessage" class="error-message" style="display: none;">
+        Error: Frame Start doit être inférieur à Frame End. Le mouvement ne peut pas commencer avant d'être fini.
+    </div>
+    <footer style="text-align: center; margin-top: 20px;">By Bladescater</footer>
+</body>
+</html>
+
