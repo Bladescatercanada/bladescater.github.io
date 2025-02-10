@@ -137,7 +137,6 @@
                 <option value="NM">NOMOVE</option>
                 <option value="WAIT">NOTHING</option>
             </select>
-            <img id="moveIcon" src="" alt="" style="width: 30px; height: 30px; display: none; margin-left: 10px;">
         </div>
 
         <!-- Section HOLD -->
@@ -576,29 +575,6 @@
                 alert("Error in copying text: " + err);
             });
         }
-
-
-
-function toggleCommands() {
-        var command = document.getElementById("command").value; // Récupère la valeur sélectionnée
-        var moveIcon = document.getElementById("moveIcon"); // Récupère l'élément image
-
-        // Dictionnaire associant chaque mouvement à son image
-        var images = {
-            "U": "images/up.png",
-            "D": "images/down.png",
-            "L": "images/left.png",
-            "R": "images/right.png"
-        };
-
-        // Vérifie si une image existe pour cette commande
-        if (images[command]) {
-            moveIcon.src = images[command]; // Change l'image
-            moveIcon.style.display = "inline-block"; // Affiche l'image
-        } else {
-            moveIcon.style.display = "none"; // Cache l'image si aucune correspondance
-        }
-    }
 
 
 
